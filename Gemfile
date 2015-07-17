@@ -42,6 +42,9 @@ group :development, :test do
   gem 'spring'
 end
 
+#bootsrap related
+gem 'bootstrap-sass', '~> 3.3.5'
+
 # Heroku
 gem 'rails_12factor', group: :production
 
