@@ -1,0 +1,4 @@
+- flash.each do |type, message|
+  .alert.alert-dismissible.fade.in{class: alert_class_for(type)}
+    .container
+      = message.html_safe unless message.nil?
