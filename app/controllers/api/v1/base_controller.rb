@@ -7,9 +7,9 @@ class API::V1::BaseController < ApplicationController
 
   respond_to :json
 
-  rescue_from ActiveRecord::RecordNotFound do |e|
-    render json: { message: e.message,error: 'record not found' }, status: :not_found
-  end
+  # rescue_from ActiveRecord::RecordNotFound do |e|
+  #   render json: { message: e.message,error: 'record not found' }, status: :not_found
+  # end
 
 
   #Set user timezone
