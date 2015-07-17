@@ -43,6 +43,7 @@ group :development, :test do
 end
 gem 'devise'
 gem 'haml-rails'
+gem 'doorkeeper'
 
 #bootsrap related
 gem 'bootstrap-sass', '~> 3.3.5'
