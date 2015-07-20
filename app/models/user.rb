@@ -41,4 +41,7 @@ class User
   # Token authenticatable
   field :authentication_token, :type => String
 
+  #Validations
+  validates :screen_name ,presence: true
+
 end

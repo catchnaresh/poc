@@ -1,4 +1,4 @@
-class API::V1::BaseController < ApplicationController
+class API::BaseController < ApplicationController
   before_action :request_must_be_json
   before_action :resource_class
   before_filter :authenticate_from_token!
@@ -14,7 +14,7 @@ class API::V1::BaseController < ApplicationController
 
   #Set user timezone
   def set_time_zone(&block)
-    time_zone = actual_user.try(:time_zone) || 'UTC'
+    time_zone = current_user.try(:time_zone) || 'UTC'
     Time.use_zone(time_zone, &block)
   end
 
@@ -65,7 +65,7 @@ class API::V1::BaseController < ApplicationController
   end
 
   def resource_class
-    @resource_class = model_from_headers.eql?('he') ? HealthExpert : User
+    @resource_class =  User
   end
 
   def email_from_headers
