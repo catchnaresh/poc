@@ -9,6 +9,9 @@ class AuthToken
   field :ip_address
   field :user_agent
 
+  #indexes
+  index({ token: 1 }, { unique: true })
+
   # Associations --------------------------------
   belongs_to :resoursable, polymorphic: true
 
@@ -18,6 +21,8 @@ class AuthToken
   # Callbacks ------------------------------------
   before_create :generate_token
   before_create :set_expire_and_last_used
+
+
 
   def expired?
     self.expires_at < Time.now

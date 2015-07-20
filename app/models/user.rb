@@ -40,8 +40,8 @@ class User
   #extra fields
   field :screen_name
 
-  # Token authenticatable
-  field :authentication_token, :type => String
+  #indexs
+  index({ email: 1 }, { unique: true })
 
   #Validations
   validates :screen_name ,presence: true
