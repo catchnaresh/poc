@@ -1,5 +1,7 @@
 class API::BaseController < ApplicationController
-  before_action :request_must_be_json
+
+  before_action :doorkeeper_authorize!
+ # before_action :request_must_be_json
   before_action :resource_class
   before_filter :authenticate_from_token!
   skip_before_filter :verify_authenticity_token
@@ -27,12 +29,12 @@ class API::BaseController < ApplicationController
 
   def authenticate_from_token!
     unless valid_headers?
-      render status: 401,  json: {success: false,message: 'Email or Token are missed in headers',
+      render status: 401,  json: {success: false,message: 'Email and Token are missed in headers',
                                   error: "Not authenticated" }
       return
     end
     request.env["devise.skip_trackable"] = true
-    resource = @resource_class.search_by_plaintext(:email, email_from_headers).take
+    resource = @resource_class.where(email: email_from_headers).first
     if resource
       resource.auth_tokens.each do |auh_token|
         # Compare token securely due to vulnerable timing attacks
@@ -76,8 +78,5 @@ class API::BaseController < ApplicationController
     request.headers["X-User-Token"]
   end
 
-  def model_from_headers
-    request.headers["X-User-Type"]
-  end
 
 end

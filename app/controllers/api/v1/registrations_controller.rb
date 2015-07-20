@@ -2,7 +2,6 @@ class API::V1::RegistrationsController < API::BaseController
   #Read: http://stackoverflow.com/questions/10167956/rails-shows-warning-cant-verify-csrf-token-authenticity-from-a-restkit-posts
   skip_before_filter :verify_authenticity_token#, if: Proc.new { |c| c.request.format == 'application/json' }
   skip_before_filter :authenticate_from_token!
-  before_action :doorkeeper_authorize!
 
   #respond_to :json
 
