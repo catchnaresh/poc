@@ -9,7 +9,7 @@ class API::V1::SessionsController < API::BaseController
     if @user and @user.valid_password? password
       sign_in @user, store: false
       token = @user.generate_auth_token(request)
-      render status: 200, json: {success: true ,data: {auth_token: token,email: @user.email,user: @user}}
+      render status: 200,  json: { success: true, user: @user , auth_token: token }
     else
       render status: 422 ,json: { errors: "Invalid email or password" }
     end

@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby "2.2.0"
+ruby "2.2.2"
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.3'
 # Use SCSS for stylesheets
@@ -53,4 +53,4 @@ gem 'rails_12factor', group: :production
 
 #mongoId related
 gem "mongoid", "~> 4.0.0"
-
+gem 'rack-cors', :require => 'rack/cors'

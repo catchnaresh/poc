@@ -71,11 +71,11 @@ class API::BaseController < ApplicationController
   end
 
   def email_from_headers
-    request.headers["X-User-Email"]
+    request.headers["X-User-Email"] || params[:email]
   end
 
   def token_from_headers
-    request.headers["X-User-Token"]
+    request.headers["X-User-Token"] || params[:auth_token]
   end
 
 

@@ -9,11 +9,10 @@ class API::V1::RegistrationsController < API::BaseController
     user = User.new(user_params)
     if user.save
       sign_in(user, store: false)
-      render status: 200, json: { success: true,info: "Registered",
-                        :data => { user: user }}#, auth_token: current_user.authentication_token } }
+      render status: 200, json: { success: true,info: "Registered",  user: user , auth_token: user.generate_auth_token(request) }
     else
       render status: :unprocessable_entity,
-             json: { success: false,  errors: user.errors.full_messages,  :data => {} }
+             json: { success: false,  errors: user.errors.full_messages.to_sentence,  :data => {} }
     end
   end
 
