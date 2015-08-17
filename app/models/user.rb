@@ -52,10 +52,9 @@ class User
   def apply_oauth(params)
     # In previous omniauth, 'user_info' was used in place of 'raw_info'
     self.email = params[:email] || ''
-    self.fname = params[:fname]
-    self.lname = params[:lname]
+    self.screen_name = params[:name]
     # Again, saving token is optional. If you haven't created the column in authentications table, this will fail
-    social_authentications.build(provider: params[:provider], uid: params[:uid], token: params[:token],expires_at: Time.at(params[:expires_in]))
+   # self.social_authentications.build(provider: params[:provider], uid: params[:uid], token: params[:oauth_token],expires_at: Time.at(params[:expires_in].to_i))
   end
 
 

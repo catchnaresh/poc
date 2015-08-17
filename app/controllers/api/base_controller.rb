@@ -24,12 +24,12 @@ class API::BaseController < ApplicationController
 
   def user_not_authorized
     render status: :unauthorized,#:forbidden
-           json: { success: false, error: 'Access Denied'}
+           json: { success: false, errors: 'Access Denied'}
   end
 
   def authenticate_from_token!
     unless valid_headers?
-      render status: 401,  json: {success: false,message: 'Email and Token are missed in headers',
+      render status: 401,  json: {success: false,errors: 'Email and Token are missed in headers',
                                   error: "Not authenticated" }
       return
     end
@@ -40,7 +40,7 @@ class API::BaseController < ApplicationController
         # Compare token securely due to vulnerable timing attacks
         if Devise.secure_compare(auh_token.token, token_from_headers)
           if auh_token.expired?
-            render(status: 401,  json: {success: false, error: "Token expired" })
+            render(status: 401,  json: {success: false, errors: "Token expired" })
             return
           else
             sign_in resource, store: false
@@ -50,13 +50,13 @@ class API::BaseController < ApplicationController
         end
       end
     end
-    render status: 401,  json: {success: false,message: 'Invalid email or token', error: "Not authenticated" }
+    render status: 401,  json: {success: false,errors: 'Invalid email or token', error: "Not authenticated" }
   end
 
   def request_must_be_json
     #if request.format != :json
     if request.content_type != 'application/json'
-      render status: 406, json: {success: false ,message: 'The request must be json',error: 'Not a valid json request'}
+      render status: 406, json: {success: false ,errors: 'The request must be json',error: 'Not a valid json request'}
       return
     end
   end

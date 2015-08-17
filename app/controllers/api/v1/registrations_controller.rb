@@ -29,8 +29,11 @@ class API::V1::RegistrationsController < API::BaseController
     else
       # Authentication not found, thus a new user.
       user = User.new
-      user.apply_oauth(parmas)
+      user.apply_oauth(params)
       if user.save(validate: false)
+        # TODO move below to after_save callback in model
+        user.social_authentications.create(provider: params[:provider], uid: params[:uid],
+                                           token: params[:oauth_token],expires_at: Time.at(params[:expires_in].to_i))
         sign_in(user, store: false)
         render status: 200, json: { success: true,info: "Registered",  user: user , auth_token: user.generate_auth_token(request) }
       else
