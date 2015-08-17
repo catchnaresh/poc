@@ -16,9 +16,37 @@ class API::V1::RegistrationsController < API::BaseController
     end
   end
 
+  #POST /api/v1/oauth/:provider
+  def via_oauth
+    # Try to find authentication first
+    authentication = SocialAuthentication.where(provider: params['provider'],uid: params['uid']).first
+    if authentication
+      # Authentication found, sign the user in.
+      user = authentication.user
+      sign_in user, store: false
+      token = user.generate_auth_token(request)
+      render status: 200,  json: { success: true, user: user , auth_token: token }
+    else
+      # Authentication not found, thus a new user.
+      user = User.new
+      user.apply_oauth(parmas)
+      if user.save(validate: false)
+        sign_in(user, store: false)
+        render status: 200, json: { success: true,info: "Registered",  user: user , auth_token: user.generate_auth_token(request) }
+      else
+        render status: :unprocessable_entity,
+               json: { success: false,  errors: user.errors.full_messages.to_sentence,  :data => {} }
+      end
+    end
+
+  end
+
+
   def user_params
     params.require(:user).permit(:email, :password,:password_confirmation,:screen_name)
   end
+
+
 
 
 end

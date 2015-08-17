@@ -46,4 +46,18 @@ class User
   #Validations
   validates :screen_name ,presence: true
 
+  # Associations
+  has_many :social_authentications,  dependent: :delete_all
+
+  def apply_oauth(params)
+    # In previous omniauth, 'user_info' was used in place of 'raw_info'
+    self.email = params[:email] || ''
+    self.fname = params[:fname]
+    self.lname = params[:lname]
+    # Again, saving token is optional. If you haven't created the column in authentications table, this will fail
+    social_authentications.build(provider: params[:provider], uid: params[:uid], token: params[:token],expires_at: Time.at(params[:expires_in]))
+  end
+
+
+
 end

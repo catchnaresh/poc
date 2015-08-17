@@ -15,6 +15,7 @@ Rails.application.routes.draw do
         post 'signup' => 'registrations#create'
         post 'signin' => 'sessions#create'
         delete 'signout' => 'sessions#destroy'
+        post 'oauth/:provider' => 'sessions#via_oauth'
       end
     end
   end

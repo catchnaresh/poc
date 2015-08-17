@@ -21,4 +21,6 @@ class API::V1::SessionsController < API::BaseController
     head 204
   end
 
+
+
 end
