@@ -13,4 +13,8 @@ class SocialAuthentication
 
   # Associations --------------------------------
   belongs_to :user
+
+  #Validations
+  validates_uniqueness_of :provider, scope: :uid
+
 end

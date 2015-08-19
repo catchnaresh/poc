@@ -26,30 +26,35 @@ class API::V1::RegistrationsController < API::BaseController
       sign_in user, store: false
       token = user.generate_auth_token(request)
       render status: 200,  json: { success: true, user: user , auth_token: token }
+      return
     else
       # Authentication not found, thus a new user.
-      user = User.new
-      user.apply_oauth(params)
-      if user.save(validate: false)
-        # TODO move below to after_save callback in model
-        user.social_authentications.create(provider: params[:provider], uid: params[:uid],
+      # check if user already exists with email
+      @user = User.where(email: params[:email]).first if params[:email].present?
+      @user = User.new unless @user
+      @user.apply_oauth(oauth_params)
+      if @user.save(validate: false)
+        @user.social_authentications.create(provider: params[:provider], uid: params[:uid],
                                            token: params[:oauth_token],expires_at: Time.at(params[:expires_in].to_i))
-        sign_in(user, store: false)
-        render status: 200, json: { success: true,info: "Registered",  user: user , auth_token: user.generate_auth_token(request) }
+        sign_in(@user, store: false)
+        render status: 200, json: { success: true,info: "Registered",  user: @user , auth_token: @user.generate_auth_token(request) }
       else
         render status: :unprocessable_entity,
-               json: { success: false,  errors: user.errors.full_messages.to_sentence,  :data => {} }
+               json: { success: false,  errors: @user.errors.full_messages.to_sentence,  :data => {} }
       end
     end
 
   end
 
+  private
 
   def user_params
     params.require(:user).permit(:email, :password,:password_confirmation,:screen_name)
   end
 
-
+  def oauth_params
+    params.permit(:email, :oauth_token,:name,:uid,:expires_in)
+  end
 
 
 end
